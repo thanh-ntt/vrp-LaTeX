@@ -1,0 +1,159 @@
+
+\section{Heuristic algorithms}
+\label{sec:heuristics}
+
+Although recent developments in exact solution algorithms for the MTVRPTW can handle instances involving up to 70 customers \citep{yang2023exact}, the complexity of exact algorithms is inherently exponential of the input size.  Large-sized problem instances of the MTVRPTW quickly become intractable for exact algorithms, \add{thus, require heuristic algorithms}.  Similar to the exact algorithms, heuristic algorithms for the MTVRPTW are often designed for different variants.  These heuristics, however, share a general framework: start with a solution construction phase (or routing phase), followed by an improvement phase, often a metaheuristic, which guides \textit{local search} (LS) moves to achieve global optimum.  \add{We note that the methods employed in the routing phase of the MTVRPTW are similar to those in the VRP and VRPTW, which have been extensively studied. Therefore, we omit the routing phase's methods and only provide a summary in Table \ref{table:3} for reference.}  In this section, we first review some articles that adapt heuristics of related problems in the literature to tackle the MTVRPTW.  We then analyze challenges in adapting existing heuristics in the context of the MTVRPTW, namely the time window and multi-trip characteristics.  We omit special techniques to handle specific variants and leave that as an open research problem.  Lastly, we discuss an aspect of the search heuristic that allows the solution to become infeasible.
+\newline
+
+%  \cite{yuan2021column} propose a column generation based heuristic for the Generalized VRPTW, which solves a restricted master problem on a subset of all feasible routes.
+
+Heuristics for MTVRPTWs are usually \addb{derivative, in other words, built upon existing ideas.}  \cite{karoonsoontawong2015efficient} modifies the efficient insertion heuristic originally designed for the \add{VRPTW with limited trip duration} by \cite{campbell2004efficient} to generate solutions with multiple trips per vehicle for the MTVRPTW-LMTD with variable customer service times.  \cite{battarra2009adaptive} adopt a routing-packing decomposition method commonly seen in the VRPTW literature \citep[e.g.,][]{fleischmann1990vehicle, taillard1996vehicle} to solve another MTVRPTW variant.  In this paper, the routing phase generates a set of feasible trips using a well-known procedure for the VRP \citep{christofides1976vehicle}, while the packing phase combines trips into journeys by a simple greedy algorithm.  \cite{cattaruzza2014iterated} introduce an iterated local search (ILS) algorithm, in which the solution is a \textit{giant tour} (i.e., permutation of customers) and the perturbation is the crossover operator from the \textit{genetic algorithm} (GA) metaheuristic.  The GA has been effectively utilized to address the VRP and the MTVRP \citep{prins2004simple, cattaruzza2014memetic}.  To obtain an MTVRPTW solution from the giant tour, \cite{cattaruzza2014iterated} perform an AdSplit procedure, which is inspired by a similar procedure for the VRP \citep{prins2004simple}.
+\newline
+
+% Talk about solution construction heuristic? parallel journey construction, split operator (cite: Azi et al. (2014 \cite{azi2014adaptive}))?
+
+Nevertheless, there are challenges in adapting the heuristics of related problems to tackle the MTVRPTWs.  \add{We classify the challenges into those caused by (i) adding time window constraints and (ii) allowing multiple trips and discuss the approaches used by existing work to tackle these challenges.}
+
+\subsection{Time windows}
+First, the presence of time windows complicates travel cost calculation and feasibility check because the impact of any trip modifications may propagate to the rest of the trip and vehicle journey.  To overcome such cascading effect, \cite{cattaruzza2016multi} propose a scheme to evaluate classical LS moves for the MTVRPTW-R in constant time by maintaining a list of special quantities \add{from \cite{vidal2013hybrid}}.  Assessing the feasibility of trips is further complicated by the time-dependent context (i.e., variable loading time, service time, travel time, etc.).  Indeed, \cite{cattaruzza2016multi} note that the evaluation of time window violation is linear to the \add{maximum} count of trips \add{within all journeys} when the vehicle loading time is trip-dependent.  \add{The time-dependent variant of MTVRPTW (TD-MTVRPTW) adds further complexity to feasibility check as segment update is non-trivial.  To address this, \cite{pan2021multi} formulate a ready time function and duration function that are time-dependent and show how these two functions can be used to perform feasibility checks in polynomial time.}
+\newline
+%scheme to deal with the TD-MTVRPTW.  This extension significantly improves the time complexity of this frequently-invoked procedure.  
+
+
+\add{Second}, time windows \add{may disallow packing of two trips into a journey due to overlapping time.  Such incompatible trips with overlapping time windows would require service from additional vehicles, which may lead to infeasible solutions if all the vehicles have been used.}  %\textit{incompatible} (i.e., cannot be combined due to time overlaps) \add{and thus requires additional consideration compared to the MTVRP}.   
+\cite{battarra2009adaptive} introduce an adaptive guidance mechanism that discourages the creation of incompatible trips.  At each iteration, the guidance mechanism tries to \add{penalize creation of routes that overlap with the} \textit{critical} time intervals, which are intervals when many trips are strongly active (i.e., time period that the trip is active in every possible scheduling).  % and critical commodities, which are commodities that are not well-packed across multiple trips.  Then the two critical features are eliminated in subsequent iterations by means of penalization or input parameters tuning.  Although the critical commodity is distinctive to the variants with multiple commodities, the critical time interval is generally a common feature of the MTVRPTWs.  
+Similarly, \cite{wang2014metaheuristic} \add{also exploits critical time intervals in their heuristic for the P-MTVRPTW.  They propose a trip partition operator %(referred to as "route partition" in the article)
+that splits a trip if it overlaps with the critical time interval to create non-overlapping sub-trips.}  %any pairs of customers if  to exploit this characteristic.  
+\add{Following from this, the routing-packing decomposition approach, which is effective for MTVRPs,}
+%\cite{cattaruzza2016vehicle} suggest that the routing-packing decomposition, which is effective for the MTVRPs, 
+struggles with the MTVRPTWs because the time window constraints make the two phases (i.e., routing and packing) deeply inter-connected \citep{cattaruzza2016vehicle}.  \add{Heuristics for MTVRPTW thus require an integrated approach that considers both routing and packing, to be more effective %as shown When comparing the effectiveness of an integrated approach with that of a routing-packing decomposition, 
+\citep[e.g.,][]{franccois2019adaptive}}.
+%find that an integrated solution method outperforms the two-phase approach in the presence of time windows.
+\newline
+
+% For instance, the introduction of time windows in the MTVRPTW causes modifications in an earlier trip to impact the rest of a vehicle journey.  Therefore, the approach of decomposing solution in two successive phases: a routing phase and a packing phase, which is effective for MTVRP, often lead to infeasible solutions for the MTVRPTW.
+
+%TODO: change to present tense
+\subsection{Multiple trips}
+The multi-trip attribute of the MTVRPTW means that each \add{journey} may contain multiple trips, while each trip may \add{visit} multiple customers.  Consequently, the solution \add{has} a multi-layered structure: a vehicle journey layer and a trip layer \citep{wang2014metaheuristic}.  Classical customer-based operators for the VRP solution approaches like customer relocation, exchange, and insertion are insufficient to achieve good solutions for the MTVRPTW because they solely focus on the trip layer.  Therefore, to effectively tackle the multi-layered characteristic of the MTVRPTW, multi-level approaches are often necessary.  
+\newline
+
+\cite{wang2014metaheuristic} \add{adopt a pool-based metaheuristic in which they maintain a pool of feasible solutions for the vehicle journey layer.  A solution is iteratively updated through an LS procedure and a new solution is added by combining trips from solutions in the pool}. %The authors then incorporated the LS procedure into a pool-based metaheuristic in which a pool of trips is initialized and updated iteratively (i.e., focuses on the trip layer), then merged to form vehicle working schedules (i.e., focuses on the vehicle layer).  
+%Although presentations differ, we believe that the algorithms in \cite{wang2014metaheuristic} and \cite{battarra2009adaptive} share the same fundamental idea: a two-phase routing-packing approach. %with a special procedure to update the trips produced in the first phase.  
+\cite{cattaruzza2016multi} consider the multi-trip aspect by extending the customer relocation and exchange operators to \add{relocation of a trip (to another journey) and swapping of trips between two journeys.}  These new trip-based operators, together with classical customer-based operators, can be either inter-vehicle or intra-vehicle in the multi-trip context.  
+\add{\cite{pan2021multi} also leverages trip-level operators in the LS procedure, including removing a trip, removing two consecutive trips from one journey, and two trips from different journeys.}  %The algorithm then reconstructs the solution through a look-ahead approach named regret insert.
+\cite{azi2014adaptive} design an adaptive large neighborhood search (ALNS)\add{-based solution} that exploits the hierarchical structure of the MTVRPTW.  The ALNS optimizes a solution through the utilization of destruction and reconstruction operators. %\citep[also referred to as removal and repair operators in][]{pan2021multi}. 
+\add{In considering the multi-layer structure of the problem, they proposed to probabilistically remove an entire vehicle's journey or a trip from the solution, in addition to the usual customer removal.}
+%then submitting the result to an acceptance criterion used in SA.  The destruction operators are selected iteratively from high-level (i.e., vehicle, trip removal) operators to low-level (i.e., customer removal) operators.  At each iteration, the respective reconstruction operators, which are devised from insertion heuristics like least-cost or regret-based, are weighted based on historical performance and chosen probabilistically.  Empirical results show that this multi-level approach outperforms the classical customer-based approach.  
+\newline
+
+\subsection{Infeasible solutions}
+The numerous constraints of MTVRPTWs greatly increase the likelihood of reaching infeasible solutions during the search.  \add{Current heuristics either allow infeasible intermediate solutions and attempt to repair the violations after the final solution is found, or guide the search space towards the feasible solutions when an infeasible intermediate solution is encountered.} \newline
+
+\cite{cattaruzza2014iterated} and \cite{franccois2019adaptive} allow infeasible intermediate solutions by relaxing the original problems on the time-related constraints.  In case the final solution is invalid, \cite{cattaruzza2014iterated} executes a repair procedure to detect and fix infeasible trips, while \cite{franccois2019adaptive} %perform a variable neighborhood descent with a customized cost function that focuses on reducing any time-related infeasibilities.  
+\add{perform relocation or exchange on a chain of vertices during a post-optimization phase to reduce time-related infeasbilities.}  \cite{despaux2016multi} solve the MTVRPTW-HF with a simulated annealing (SA) algorithm, whose LS moves can violate constraints related to both time window and vehicle capacity.  The algorithm then attempts to lead the search into a feasible space of solutions by prioritizing two special operations that eliminate constraint violations.  \add{If the capacity constraint is violated, the algorithm relocates the customer with the greatest demand from the violating trip to another trip with available vehicle capacity.  For violation of the time-window constraint, the algorithm relocates the last visited customer from the violating trip to another trip that ends before the specified time constraint.}    \cite{cattaruzza2016multi}, considering the MTVRPTW-R, incorporate two penalty factors into the \add{fitness} function \add{of their memetic algorithm to penalize time window and vehicle capacity violations.}  The \add{penalty factor} is adjusted every time the population of its memetic algorithm reaches a certain dimension 
+\add{according to the number of violations observed in recently generated individuals.}  Although allowing infeasible intermediate solutions may expand the search space, we believe that it increases search diversity at the expense of additional runtime and algorithm complexity; thus, it should be introduced with care.
+
+\subsection{Summary}
+In practice, studies in the MTVRPTW literature usually employ a mixture of the aforementioned methods.  A comprehensive categorization can be found in Table \ref{table:3}.  In the table, we also record the heuristics of the routing phase %whether the routing phase of an algorithm produces a feasible solution (Feasible Sol. Construction column) 
+and whether intermediate solutions can be infeasible (Infeasible Intmd. Sol. column), respectively.  Note that evolutionary algorithms like genetic algorithms and memetic algorithms generally start with an initial population, which can be transformed into solutions with a special procedure.  Therefore, we regard their routing phases as being able to construct a solution \citep[e.g.,][]{cattaruzza2016multi, zhen2020multi}.  Additionally, a summary of each algorithm is provided for quick reference.  \add{Some papers with specific application constraints are omitted because their problem formulations include special considerations specific to the application context \citep[e.g.,][]{anaya2016biomedical, benkebir2019multi}} or the heuristics are irrelevant to the discussion \citep[e.g.,][which focuses on a comparison of single-trip and multiple-trip insertion heuristic, and is only applicable for the routing phase]{karoonsoontawong2015efficient}.
+
+
+\begin{landscape}
+\begin{table}[]
+\scriptsize
+    \centering
+    \begin{tabular}{@{}
+    >{\raggedright}p{1.5cm}                         % paper
+    >{\raggedright}p{2.2cm}                         % method
+    %>{\centering}p{1.3cm}              % solution construction
+    >{\raggedright}p{2cm}                         % heuristic
+    >{\raggedright}p{2cm}                         % customer operation
+    >{\raggedright}p{2cm}                         % trip operation
+    >{\centering\arraybackslash}p{1cm}            % infeasible intmd. sol.
+    p{7.6cm}@{}}                                    % algorithm summary
+    \toprule
+        %& & \multicolumn{2}{c}{Routing Phase}
+        %& \multicolumn{2}{c}{Local Search Moves} & & \\
+        %\cmidrule{3-5}
+            %& %& Feasible Sol.  
+            & & Routing Phase & Customer & Trip
+            & \multicolumn{1}{l}{Infeasible}
+            & \multicolumn{1}{c}{Algorithm} \\
+            Paper   &   Method  %&   Construction
+            & Method  &   Operation     &   Operation
+            &  \multicolumn{1}{l}{Intmd. Sol.}
+            &  \multicolumn{1}{c}{Summary} \\
+         \midrule
+         \cite{battarra2009adaptive} 
+         & Iterative Routing-Packing (IRP)
+         %& N  
+         & Sequential insertion, pivoted customers, parallel insertion & 2-opt  & - & N &
+         IRP: two-step routing and greedy packing. An adaptive guidance mechanism influences the trips produced in routing heuristics: critical time intervals and critical commodities. \\ 
+         \midrule
+         \cite{wang2014metaheuristic}   
+         & Adaptive Memory Procedure (AMP)
+         %& N   
+         & Optimal splitting procedure & Relocate, swap   & Trip partition   & N  & Construct trips based on optimal splitting procedure; assign trips in the pool to a vehicle, then perform LS. Iteratively update the trip pool with the best solution found.  \\  
+         \midrule
+         \cite{azi2014adaptive}
+         & Adaptive Large Neighborhood Search (ALNS)
+         %& Y  
+         & Parallel construction (of journeys) & Remove related (spatial-temporal) customers & Remove related (spatially proximate) trips     & N
+         & ALNS chooses destruction operators iteratively; chooses reconstruction operators probabilistically (weighted based on historical performance). Destruction operator is insertion with least-cost or regret-based heuristics. The acceptance criterion is similar to SA. \\
+         \midrule
+         \cite{cattaruzza2014iterated}
+         & Iterated Local Search (ILS)
+         %& Y 
+         & Giant tour AdSplit  & Relocate, swap, 2-opt, 2-opt*  & Relocate, swap (trips)     & Y & ILS uses crossover operator on giant tour as a perturbation, AdSplit transforms such perturbation to a solution, LS improve the solution. If the final solution is infeasible, apply a repair procedure. The AdSplit is based on label generation, with a heuristic to limit the number of permutations.  \\ 
+         \midrule
+         \cite{cattaruzza2016multi}
+         & Memetic Algorithm (MA)
+         %& Y    
+         & Initial population & Relocate, exchange, 2-opt* & Relocate, exchange (trips) & Y    
+         & MA selects chromosomes with a binary tournament (crossover operator). Chromosomes are giant tours (i.e., permutations of nodes). LS moves to improve chromosomes with adjusted penalization. The AdSplit transforms chromosomes into solution.  \\
+         \midrule
+             \cite{despaux2016multi}    
+             & Simulated Annealing (SA)
+             %& Y
+             & Solomon insertion heuristic                 
+             & Revert order, relocation, swap
+             & Relocate, divide overloaded trip, overflow in planning
+             & Y
+             & SA selects LS move uniformly; if the solution is infeasible, prioritize special moves. \\
+         \midrule
+         %\cite{benkebir2019multi}
+         %& Hybrid Genetic Algorithm (HGA)
+         %& Y
+         %& Giant tour, Split, Graph-coloring                                        & 5 special LS moves                                                           & -                                                                      & Y                                                                                      & HGA has similar idea to MA in Cattaruzza et al. (2016)       
+         %\\
+         %\midrule
+         \cite{franccois2019adaptive}
+         & ALNS
+         %& Y 
+         & Sequential insertion                                                     & Relocate, exchange                                                           & -                                                                      & Y                                                                                      & ALNS with Multitrip Operators and ALNS combined with Bin Packing.         \\ 
+         \midrule
+         \cite{zhen2020multi}
+         & Hybrid Particle Swarm Optimization (HPSO) / Hybrid Genetic Algorithm (HGA)
+         %& N
+         & Random
+         & Relocate, exchange, revert order
+         & -
+         & Y
+         & The HPSO extends PSO with a local search-variable neighborhood descent (LS-VND) and a solution translation mechanism, while the HGA incorporates a reorder routine to speed up the algorithm.
+         \\ 
+         \midrule
+         \cite{pan2021multi}
+         & ALNS
+         %& Y
+         & Regret insert                                                            & Relocate, swap                                                               & Remove 1 or 2 trips*                                                   & N                                                                                      & ALNS chooses destruction  reconstruction probabilistically (weighted based on historical performance). Reconstruction is insertion with regret insert; ALNS perturbation strength is increased gradually.
+         \\
+         \bottomrule
+    \end{tabular}
+    \caption{Heuristic Algorithms}
+    \label{table:3}
+\end{table}
+\end{landscape}
+
+
+%Difficult to evaluate the time window violation when the loading time is trip-dependent (cannot use Solomon's push-forward directly) (cite \cite{cattaruzza2016multi})

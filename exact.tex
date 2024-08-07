@@ -1,0 +1,95 @@
+
+\section{Exact algorithms}
+\label{sec:exact}
+
+The VRP and MTVRP have been established as NP-hard problems \citep[see, e.g.,][]{lenstra1981complexity, olivera2007adaptive}.
+It follows that the MTVRPTW is also NP-hard, as the MTVRP is reducible to the MTVRPTW by setting the time window at each customer to $[0, \infty]$.  In Section \ref{sec:formulation}, we model the MTVRPTW as a MILP.  Hence, one can utilize commercial optimization solvers like IBM ILOG CPLEX and Gurobi to tackle small-scale MTVRPTWs.  However, for most medium-scale and large-scale instances, more efficient solution algorithms are called for.  This section reviews the exact algorithms suggested for the MTVRPTW and its variants.  The heuristic algorithms are surveyed in the next section.
+\newline
+
+\add{\textit{Branch-and-cut}, \textit{branch-and-price}, and their combinations are popular exact algorithms for solving the MILPs. Branch-and-cut tries to obtain the optimal solution of a MILP through the application of a \textit{branch-and-bound}  algorithm while incorporating cutting planes to tighten the linear programming relaxations \citep{padberg1991branch}.  The effectiveness of the cutting plane procedure depends on finding a violated valid inequality in the relaxed MILP, which is often termed as the \textit{separation problem}.  Furthermore, \cite{barnhart1998branch} propose the branch-and-price, which integrates \textit{column generation} with branch-and-bound.  More specifically, the column generation method is characterized by a \textit{master problem} (MP) that is the initial problem with only a subset of the variables taken into account, and a \textit{pricing subproblem} that determines an improving variable (i.e., improving the objective function of the MP).  The branch-and-bound in the above optimization methods divides an optimization problem into smaller sub-problems and uses a bounding function to prune sub-problems that cannot have the optimal solution.}
+\newline
+
+%\footnote{We omit Neira et al. (2020) \cite{neira2020new} because its two MILP formulations do not fit with the table structure.}
+
+% A classic approach for solving MILPs is \textit{Branch-and-cut} (Padberg and Rinaldi, 1991 \cite{padberg1991branch}), which tries to find an optimal solution through relaxing the integrality restrictions while using \textit{cutting planes} to obtain a lower bound for the original problem (i.e., tighten the LP relaxation).  The effectiveness of the cutting plane procedure depends on finding a violating inequality in the relaxed MILP's solution, which is commonly referred to as \textit{separation problem}.  Another method, which is effective in dealing with MILPs having a huge number of variables, is \textit{Column generation} (Ford and Fulkerson, 1958 \cite{ford1958suggested}).  The column generation method is characterized by a \textit{master problem} (MP), which is the original problem with only a subset of variables being considered, and a \textit{pricing subproblem}, which is a new problem created to determine an improving variable (i.e., improve the objective function of the MP).  Barnhart et al. (1998) \cite{barnhart1998branch} proposed the \textit{Branch-and-price} method that combines column generation and \textit{branch-and-bound}.  The branch-and-bound method is similar to branch-and-cut, which also tries to relax the integrality restrictions, except that it does not involve cutting planes.
+%\newline
+
+\cite{azi2010exact} employ the branch-and-price method to tackle the Profit MTVRPTW with Service-Dependent Loading Times and Limited Trip Duration (P-MTVRPTW-SDLT-LTD).  The MP in column generation is formulated as a set packing problem whose variables (i.e., columns) represent vehicle journeys.  The pricing subproblem is modeled as an elementary shortest path problem with resource constraints (ESPPRC), which is defined on a graph with nodes representing trips and arcs representing feasible consecutive trips.  The algorithm's performance is evaluated using instances adopted from \cite{solomon1987algorithms}, specifically R2, C2, and RC2 instances (i.e., long scheduling horizon) with 25 and 40 customers.  Instances with short scheduling horizons are discarded because they prevent the vehicles from performing multiple trips.  \cite{hernandez2014new} present an algorithm based on branch-and-price for the MTVRPTW with Service-Dependent Loading Times and Limited Trip Duration (MTVRPTW-SDLT-LTD).  They formulate the MP as a set covering problem, whose variables (i.e., columns) represent trips.  They then solve the pricing subproblem to identify new trips with negative reduced costs.  In addition, they use mutual exclusion constraints to assign a selected trip to vehicles, while preventing assigning two overlapping trips to the same vehicle.
+\cite{hernandez2016branch} propose two branch-and-price algorithms, each founded on a different set covering formulation, to solve the MTVRPTW-LDLT.  One of the formulations considers trips as columns and the other treats journeys as columns.  After comparing the two algorithms using Solomon's benchmark \citep{solomon1987algorithms}, they conclude that the trip-based representation is generally more effective.  \cite{neira2020new} present two distinct MILP formulations for both the MTVRPTW-SDLT-LTD and the MTVRPTW-SDLT, and show that model formulation has a significant effect on model performance.  More specifically, they show that their models outperform the three-index formulations for the MTVRPTW-SDLT and MTVRPTW-SD in the literature, and can be implemented with ease using standard optimization solvers available in the market.  In addition, in terms of the MTVRPTW-SD, their models are competitive compared to the branch-and-price algorithms presented by \cite{hernandez2016branch}.  \cite{huang2021multi} formulate their MTVRPTW-QDUT as a trip-based set partitioning model.  To address this model, they employ a branch-and-price-and-cut algorithm, which utilizes the column generation approach to handle the linear relaxation and incorporates rounded capacity inequalities to tighten the relaxation gap.
+\newline
+
+Apart from the exact algorithms mentioned above, other methods can also be found in the literature.  \cite{macedo2011solving} introduce a pseudo-polynomial network flow model designed for the P-MTVRPTW-SDLT-LTD.  In the model, each vehicle journey corresponds to a path in an acyclic-directed graph, where nodes symbolize discrete time instants and arcs symbolize feasible trips.  In addition, each time instant corresponds to a specific continuous time interval, also referred to as granularity.  The number of constraints is polynomial in the cardinality of this time-indexed graph, thus the pseudo-polynomial naming.  During execution, the algorithm iteratively refines the granularity until a feasible solution is achieved.  The same authors generalize this algorithm with new discretization rules in \cite{macedo2012generalized}.  Both articles consider the same instances outlined in \cite{azi2010exact}.  Computational results suggest that this algorithm is effective in reducing execution time for most of the test instances.
+\newline
+
+Indeed, most exact methods are tailored to specific MTVRPTW variants, and thus it is not trivial to extend those methods to solve other variants.  \cite{paradiso2020exact} introduce an exact solution framework (ESF) capable of solving four different MTVRPTW variants: the MTVRPTW-LDLT, the MTVRPTW-LTD, the MTVRPTW-R, and the Drone-Routing Problem \citep[e.g.,][]{cheng2018formulations}.  The ESF relies on the notion of \textit{structure}, which is a trip with a starting time interval such that the trip duration and cost are the same for any departure times in this interval.  This structure-based formulation greatly decreases the count of variables and constraints compared to other formulations.  The ESF employs a branch-and-cut procedure, whose separation problem is to determine if a structure set represents a feasible MTVRPTW solution.  This separation problem is modeled as a Team Orienteering Problem with Time Windows \citep[see, e.g.,][]{vansteenwegen2009iterated} and then solved by the column generation method.  Experimental results indicate that the ESF surpasses previous works in the literature.  \cite{yang2023exact} enhances the ESF \citep{paradiso2020exact} to address instances involving as many as 70 customers.
+\newline
+
+It is important to note that the majority of exact algorithms for the MTVRPTW require an enumeration of all feasible non-dominated trips.  \cite{azi2007exact} introduce a dominance concept for the single-vehicle routing problem, with time windows and multiple routes to prematurely discard non-promising partial \textit{path}.  A path $p_1$ is considered to dominate another path $p_2$ under the following conditions: (1) They both end at the same customer; (2) they contain the same customer set, possibly in a different sequence; and (3) $p_1$ is not longer and does not require more resources than $p_2$.  In \cite{azi2007exact}, a path can be a trip, journey, or structure, depending on the context.  This dynamic programming-based approach is adopted by subsequent articles to accelerate the search.  For example, \cite{macedo2011solving} propose three additional dominance rules for their network flow model to reduce the arc count \addb{for the P-MTVRPTW-SDLT-LTD}, while \cite{hernandez2016branch} and \cite{christiansen2017operational} develop \addb{new} dominance relations for \addb{the MTVRPTW-LDLT and the TD-MTVRPTW-SAC, respectively}.  As noted by \cite{azi2007exact}, this dominance method is particularly sensitive to deadline constraints (i.e., the number of feasible routes increases drastically when the trip duration limit is not tight).  That is, this dominance method may struggle with less time-constrained MTVRPTW variants.
+\newline
+
+A summary of exact algorithms for the MTVRPTW and its variants is presented in Table \ref{table:2}.
+
+\begin{table}[]
+    \small
+    \centering
+    % \begin{tabular}{@{}>{\raggedright}p{1.8cm}>{\raggedright}p{3cm}>{\raggedright}p{4.5cm}l@{}}
+    \begin{tabular}{@{}>{\raggedright}p{3.5cm}>{\raggedright}p{4cm}p{6cm}@{}}
+        \toprule
+        Paper & Method                                                                             & Model \\
+        \midrule
+        \cite{azi2010exact}
+              & Branch-and-price
+              & Master problem: set packing
+        \newline Pricing subproblem: elementary shortest-path problem with resource constraints (ESPPRC)   \\
+        \midrule
+        \cite{macedo2011solving}
+              & Network flow, time discretization
+              & Minimum flow problem
+        \newline Solution: paths in network flow
+        \newline Nodes: discrete time instants                                                             \\
+        \midrule
+        \cite{macedo2012generalized}
+              & Network flow, time discretization
+              & Minimum flow problem
+        \newline Solution: paths in network flow
+        \newline Nodes: discrete time instants                                                             \\
+        \midrule
+        \cite{hernandez2014new}
+              & Branch-and-price
+              & Master problem: set covering
+        \newline Pricing subproblem: select timing for trips                                               \\
+        \midrule
+        \cite{hernandez2016branch}
+              & Branch-and-price
+              & Master problem: set covering
+        \newline Pricing subproblem: ESPPRC                                                                \\
+        \midrule
+        \addb{\cite{christiansen2017operational}}
+              & \addb{Branch-and-bound}
+              & \addb{Arc-flow and path-flow models}                                                       \\
+        \midrule
+        \cite{paradiso2020exact}
+              & Branch-and-cut with embeded column generation
+              & (Separation problem of branch-and-cut) Team Orienteering Problem with Time Windows         \\
+        \midrule
+        \cite{neira2020new}
+              & MILP formulations (solve with CPLEX)
+              & Two-index node insertion model,
+        \newline Two-index arc insertion model                                                             \\
+        \midrule
+        \cite{huang2021multi}
+              & Branch-and-price
+              & Master problem: set partitioning
+        \newline Pricing subproblem: ESPPRC                                                                \\
+        \midrule
+        \cite{yang2023exact}
+              & Price-cut-and-enumerate
+              & (Separation problem of branch-and-cut) Team Orienteering Problem with Time Windows         \\
+        \bottomrule
+    \end{tabular}
+    \caption{Exact Algorithms}
+    \label{table:2}
+\end{table}
+
+
+%Note that, in Hernandez et al. (2016) \cite{hernandez2016branch}, both formulations (i.e., journey and trip representations) have the same model.  Additionally, the last column of the table denotes the variable in the column representation of the algorithms.  Note that this is different from the variable in the mathematical model of the problem (i.e., arc-based or path-based formulation).

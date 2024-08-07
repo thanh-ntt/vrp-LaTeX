@@ -1,0 +1,247 @@
+
+\section{Classification of MTVRPTW variants}
+\label{sec:variants}
+
+The MTVRPTW defined in Section \ref{sec:formulation} can be considered as a base case for various studies within the MTVRPTW literature because they add at least one more feature to the MTVRPTW.  This section identifies and classifies these MTVRPTW variants. The classification obtained is shown in Table \ref{table:1}.  In what follows, we introduce the motivation, formal definition, and mathematical model, modified from the model (\ref{eq1})-(\ref{eq15}) if possible, of each variant.
+
+\begin{table}[]
+\scriptsize
+    \centering
+    \begin{threeparttable}
+    \begin{tabular}{@{}>{\raggedright}p{3cm}>{\raggedright}p{4cm}p{9cm}@{}}
+    \toprule
+         Paper  &   Features  &   Author's naming   \\
+         \midrule
+             \cite{battarra2009adaptive}
+             & 1, 3, 5, 6, 7
+             & Minimum Multiple Trip Vehicle Routing Problem (MMTVRP) \\
+         \midrule
+             \cite{azi2010exact}
+             & 2, 4, 6
+             & Vehicle Routing Problem with Time Windows and multiple use of vehicles \\
+         \midrule
+             \cite{macedo2011solving}
+             & 2, 4, 6
+             & Vehicle Routing Problem with Time Windows and Multiple Routes (MVRPTW) \\
+         \midrule
+             \cite{macedo2012generalized}
+             & 2, 4, 6
+             & Vehicle Routing Problem with Time Windows and Multiple Routes (MVRPTW) \\
+         \midrule
+             \cite{hernandez2014new}
+             & 4, 6
+             & Multi-Trip Vehicle Routing Problem with Time Windows and Limited Duration (MTVRPTW- LD) \\
+         \midrule
+             \cite{wang2014metaheuristic}
+             & 2, 4, 6, 7
+             & Vehicle Routing Problem with Multiple Trips and Time Windows (VRPMTW) \\
+         \midrule
+             \cite{azi2014adaptive}
+             & 2, 4, 6
+             & Vehicle Routing Problem with Multiple Routes (VRPMTW) \\
+         \midrule
+             \cite{cattaruzza2014iterated}
+             & 1, 3, 5, 6, 7
+             & Multi-Commodity Multi-Trip Vehicle Routing Problem with Time Windows (MMTVRP) \\
+         \midrule
+             \cite{karoonsoontawong2015efficient}
+             & 7, variable customer service time
+             & Multitrip Vehicle Routing Problem with Time Windows and Shift Time Limits (MTVRPTW- STL) \\
+         \midrule
+             \cite{hernandez2016branch}
+             & 5
+             & Multi-Trip Vehicle Routing Problem with Time Windows (MTVRPTW) \\
+         \midrule
+             \cite{anaya2016biomedical}
+             & 7, 11
+             & Biomedical Sample Transportation Problem (BSTP) \\
+         \midrule
+             \cite{cattaruzza2016multi}
+             & 8
+             & Multi-Trip Vehicle Routing Problem with Time Windows and Release Dates (MTVRPTW-R) \\
+         \midrule
+             \cite{despaux2016multi}
+             & 1, 9, fleet size constraint
+             & Multi-Trip Vehicle Routing Problem with Time Windows and Heterogeneous Fleet (MTVRP- TWHF) \\
+         \midrule
+             \addb{\cite{christiansen2017operational}}
+             & \addb{10, 11}
+             & \addb{Fuel Supply Vessel Routing Problem (FSVRP)} \\
+         \midrule
+             \cite{benkebir2019multi}
+             & 7, 11
+             & Multi-Trip Vehicle Routing Problem with Time Windows integrating European and French Driver Regulations \\
+         \midrule
+             \cite{franccois2019adaptive}
+             & 4, 7, minimizing working duration
+             & Multitrip Vehicle Routing Problem with Time Windows (MTVRPTW) \\
+         \midrule
+             \cite{paradiso2020exact}
+             & 5, 6, 8
+             & Capacitated Multitrip Vehicle-Routing Problems with Time Windows (CMTVRPTW) \\
+         \midrule
+             \cite{neira2020new}
+             & 4, 6
+             & Multi-Trip Vehicle Routing Problem with Time Windows, Service-Dependent loading times, and Limited Trip duration (MTVRPTW- SDLT) \\
+         \midrule
+             \cite{zhen2020multi}
+             & 8, multi-depot
+             & Multi-Depot Multi-Trip Vehicle Routing Problem with Time Windows and Release Dates (Multi-D\&T VRPTW-R) \\
+         \midrule
+             \cite{pan2021multi}
+             & 4, 6, 10
+             & Multi-Trip Time-Dependent Vehicle Routing Problem with Time Windows (MT-TDVRPTW) \\
+         \midrule
+             \cite{huang2021multi}
+             & 11
+             & Multi-Trip Vehicle Routing Problem with Time Windows and Unloading Queue at Depot (MTVRPTW-UQD) \\
+         \midrule
+             \cite{yang2023exact}
+             & 5, 6, 8
+             & Capacitated Multitrip Vehicle-Routing Problems with Time Windows (CMTVRPTW) \\
+         \bottomrule
+    \end{tabular}
+    \begin{tablenotes}
+        \item[1] Minimum MTVRPTW 
+        \item[2] Profit MTVRPTW
+        \item[3] Multi-Commodity MTVRPTW
+        \item[4] MTVRPTW with Service-Dependent Loading Time 
+        \item[5] MTVRPTW with Load-Dependent Loading Time 
+        \item[6] MTVRPTW with Limited Trip Duration
+        \item[7] MTVRPTW with Limited Multi-Trip Duration
+        \item[8] MTVRPTW with Release Date
+        \item[9] MTVRPTW with Heterogeneous Fleet
+        \item[10] Time-Dependent MTVRPTW
+        \item[11] MTVRPTW with Specific Application Considerations
+    \end{tablenotes}
+    \caption{Classification of MTVRPTW Variants}
+    \label{table:1}
+    \end{threeparttable}
+\end{table}
+
+\subsection{Minimum MTVRPTW}
+\label{subsec:minimum}
+
+The \textit{Minimum MTVRPTW} (M-MTVRPTW) removes the fleet size constraints and focuses on the strategic fleet sizing, with variable travel cost as the tie-breaker \cite[e.g.,][]{battarra2009adaptive, cattaruzza2014iterated}.  This extension is motivated by the fact that vehicle cost is much higher than the variable travel cost.  We can remove constraints (\ref{eq8}) and replace objective function (\ref{eq1}) by objective function (\ref{eq16}) to formulate the M-MTVRPTW:
+% For example, a delivery service operating self-driving electric delivery vans for its last-mile delivery network, or a business outsourcing its delivery to a subcontractor with a per-vehicle cost scheme, might find minimizing the number of used vehicles as the most suitable objective.
+
+\begin{equation}
+Min \quad
+    \sum_{p \in P} c_p x_p - \theta \sum_{p_1 \in P} \sum_{p_2 \in P : p_1 < p_2} z_{{p_1}{p_2}} \label{eq16}
+\end{equation}
+\begin{align}
+s.t. \quad (\ref{eq2})-(\ref{eq7})&, (\ref{eq9})-(\ref{eq15}) \nonumber
+\end{align}
+
+The objective function (\ref{eq16}) optimizes both the fleet size and the route cost.  A parameter $\theta$ is introduced to determine the relative weight between the two objectives.  Note that aside from the weighted sum method, the lexicographic and hierarchical methods are also commonly used to tackle multi-objective optimization problems \citep[e.g.,][]{arora2017multi}, in which preferences are established by arranging the objective functions in a specific order.
+
+\subsection{Profit MTVRPTW}
+
+A limited number of vehicles with capacity constraints may not be able to service all customers within their specified service time windows.  Hence, the \textit{Profit MTVRPTW} (P-MTVRPTW) relaxes the constraint that all customers must be served. It follows that the objective of the P-MTVRPTW, which is similar to the Orienteering Problem, is to maximize the profit defined as the revenue obtained by serving selected customers minus the total travel cost.  Let $g_i$ be the revenue associated with customer $i \in V$, the P-MTVRPTW can be formulated as follows.
+\begin{equation} \ \label{eq17}
+    Max \quad \sum_{i \in V} \sum_{p \in P} g_i y^p_i - \sum_{p \in P} c_p x_p
+\end{equation}
+\begin{equation} \label{eq18}
+    s.t. \quad \sum_{p \in P} y^p_i \leq 1, \quad \forall i \in V
+\end{equation}
+\begin{align}
+(\ref{eq2})&, (\ref{eq4})-(\ref{eq15}) \nonumber
+\end{align}
+
+As indicated, the objective function (\ref{eq17}) maximizes the profit. Constraints (\ref{eq18}) replace constraints (\ref{eq3}), and ensure that a customer can be unserved. It is noted that most previous studies consider the case that all customers are associated with the same revenue by setting $g_i = 1, \forall i \in V$ \citep[e.g.,][]{azi2010exact, macedo2011solving, macedo2012generalized, wang2014metaheuristic}.
+
+
+\subsection{Multi-commodity MTVRPTW}
+The \textit{Multi-Commodity MTVRPTW} (MC-MTVRPTW), first introduced by \cite{battarra2009adaptive}, assigns a commodity set $C$ to a customer set $V$ while imposing that a vehicle cannot carry goods of different commodities together.  The MC-MTVRPTW can be formulated by introducing commodity-specific parameters:
+
+\begin{itemize}
+    \item Each customer $i \in V$ is associated with $C$ different demands, with each demand having an independent service time and time window.  More specifically, customer $i$'s demand for a commodity $c$ is denoted as $q_{ic}$ that is correlated with a service time $s_{ic}$, and a time window $[a_{ic},b_{ic}]$.
+    \item Each vehicle has a capacity $Q_c$ and a cost factor $\tau_c$ per travel unit for commodity $c \in C$.
+    \newline
+    \textit{(We omit other constraints for brevity)}
+\end{itemize}
+
+\cite{battarra2009adaptive} formulate the supermarket goods distribution problem on a territory spanning multiple regions as an MC-MTVRPTW that involves three different commodities of vegetables (V), fresh products (F), and non-perishable items (N).  Additionally, the routing problem considered by \cite{battarra2009adaptive} involves not only multi-commodity but also fleet size minimization, and is referred to as the Multi-Commodity Minimum MTVRPTW (MC-M-MTVRPTW) in this review.
+
+\subsection{MTVRPTW with dependent loading or unloading times}
+% In the \textit{MTVRPTW with Service-Dependent Loading Times} (MTVRPTW-SDLT), the vehicle loading time at the depot of a trip is dependent on the total service times of customers.  Azi et al. (2010) \cite{azi2010exact} introduced the following constraints to model the MTVRPTW-SDLT:
+
+%(i.e., service-dependent) or the total customer load in that trip (i.e., load-dependent).  Azi et al. (2010) \cite{azi2010exact} introduced the following constraints to model the \textit{MTVRPTW with Service-Dependent Loading Times} (MTVRPTW-SDLT)\footnote{Not to be confused with the abbreviation suggested in Neira et al. (2020) \cite{neira2020new} for the MTVRP with Time Windows, Service Dependent loading times, and Limited Trip duration}:
+
+Two types of the \textit{MTVRPTW with Dependent Loading Times} can be found in the literature.  One type is the \textit{MTVRPTW with Service-Dependent Loading Times} (MTVRPTW-SDLT), in which the vehicle loading time of a trip depends on the sum of customers' service time in the trip.  In such a setting, a vehicle cannot begin the trip before the corresponding loading at the depot is completed. That is, by adding constraints (\ref{eq19}) to and using constraints (\ref{eq20}) and (\ref{eq21}) to replace constraints (\ref{eq7}) in model (\ref{eq1})-(\ref{eq15}), the MTVRPTW-SDLT can be formulated as follows \citep{azi2010exact}:
+
+\begin{spreadlines}{14pt} % ooiwt - from mathtools
+\allowdisplaybreaks
+\begin{align} 
+Min &\quad \sum_{p \in P} c_p x_p &\quad
+\tag{\ref{eq1}}
+\end{align}
+\begin{align}
+    s.t. \quad \sigma^p &= s_0 + \tau \sum_{i \in V} s_i y^p_i, & \quad \forall p \in P,
+\label{eq19} \\
+    t^p_0 &\geq a_0 + \sigma^p, & \quad \forall p \in P,
+\label{eq20} \\
+    t^{p_1}_{n + 1} + \sigma^{p_2} &\leq t^{p_2}_0 + M(1 - z_{{p_1}{p_2}}), & \quad \forall p_1, p_2 (p_1 < p_2) \in P,
+\label{eq21} \\
+(\ref{eq2})-(\ref{eq6})&, (\ref{eq8})-(\ref{eq15}) \nonumber
+\end{align}
+\end{spreadlines}
+
+where $\sigma^p$ indicates the total loading time for trip $p \in P$; $s_0$ is the constant loading time (i.e., setup time) at the depot; $\tau \geq 0$ is the loading factor representing the variable loading time needed per service time unit in the trip.  Note that similar to the MTVRPTW, most previous MTVRPTW-SDLT studies exclude loading time from trip duration \citep[e.g.,][]{macedo2011solving, hernandez2014new}.
+\newline
+
+%In such settings, each trip cannot start before the vehicle is fully loaded at the depot. This restriction is illustrated in Constraints (\ref{eq20}) and (\ref{eq21}), which replace Constraints (\ref{eq7}) in the MTVRPTW formulation.
+%\newline
+
+%The \textit{MTVRPTW with Load-Dependent Loading Times} (MTVRPTW-LDLT) is a variant of the MTVRPTW-SDLT, which accounts for the quantity of cargo delivered in the trip to the loading time.  Battarra et al. (2009) \cite{battarra2009adaptive} attributed the loading time required at the depot to a constant maneuver time and a unit loading time for each unit of goods to be delivered in the trip.  The fixed and variable components of the loading time can be illustrated with the following constraints (replacing Constraints (\ref{eq19}) in the MTVRPTW-SDLT formulation):
+
+The other type is the \textit{MTVRPTW with Quantity-Dependent Loading Times} (MTVRPTW-QDLT) which accounts for the quantity of cargo delivered in the trip to the loading time at the depot.  \cite{battarra2009adaptive} define this loading time to be the sum of a constant operation time plus the time it takes to load all cargo delivered in the trip.  We can modify the mathematical model of the MTVRPTW-SDLT by replacing constraints (\ref{eq19}) with constraints (\ref{eq22}) to have the model of the MTVRPTW-QDLT.
+
+\begin{equation} \label{eq22}
+    \sigma^p = s_0 + \tau \sum_{i \in V} q_i y^p_i, \quad \forall p \in P
+\end{equation}
+
+Likewise, the unloading time may also be treated as a variable. That is, the \textit{MTVRPTW with Quantity-Dependent Unloading Times} (MTVRPTW-QDUT) assumes that the unloading times at the depot and/or customers are variable instead of fixed.  \cite{karoonsoontawong2015efficient} assumes that the unloading time at each customer is calculated by multiplying the customer demand by the delivery rate.  The author does not develop mathematical models but directly resorts to heuristic algorithms.  Inspired by challenges in urban waste collection, \cite{huang2021multi} associates the depot with a restricted unloading capacity.  Hence, if the unloading capacity is fully used, certain vehicles must be put in a queue, and the vehicle unloading time at the depot is determined by the product of the unit unloading time of cargo and the number of carried cargo.  To mathematically model their MTVRPTW-QDUT, they consider a set of discrete unloading time slots, with each associated with the maximum number of vehicles at the depot.
+
+\subsection{MTVRPTW with limited trip duration}
+
+% The \textit{MTVRPTW with Limited Trip Duration} (MTVRPTW-LTD) imposes a trip duration limit, where the service of the last customer in the trip cannot start later than $t_{max}$ time units after the trip begins. These deadline constraints are relevant in the case of delivering perishable goods, which must be delivered within a certain amount of time from loading. Additionally, this trip-duration limit, which leads to the creation of short trips, is also considered as the motivation for making multiple trips in some MTVRPTW papers (e.g., Azi et al., 2010 \cite{azi2010exact}; Azi et al., 2014 \cite{azi2014adaptive}).  The MTVRPTW-LTD can be modeled by adding the following constraints to the basic MTVRPTW formulation.
+
+Two types of the \textit{MTVRPTW with Limited Trip Duration} (MTVRPTW-LTD) exist in the routing literature.  One type is the \textit{MTVRPTW with Limited Single-Trip Duration} (MTVRPTW-LSTD) that imposes a trip duration limit, where the service of the last customer in the trip cannot begin later than $t_{max}$ time units after the trip starts.  These maximum trip duration constraints are commonly considered in routing problems with perishable products.  Note that the trip-duration limit leads to the creation of short trips, and is thus being considered as the motivation for allowing vehicles to make multiple trips by some articles \citep[e.g.,][]{azi2010exact, azi2014adaptive}.  The MTVRPTW-LSTD can be formulated by incorporating additional constraints to the basic MTVRPTW formulation listed as program (\ref{eq1})-(\ref{eq15}).  The additional constraints are:
+
+\begin{equation} \label{eq23}
+    t^p_i \leq t^p_0 + t_{max}, \quad \forall i \in V, \quad \forall p \in P
+\end{equation}
+
+where the trip duration limit $t_{max}$ excludes the time for loading the vehicle, servicing the last customer, and returning to the depot.
+\newline
+
+% A variant of the MTVRPTW-LTD, the \textit{MTVRPTW with Limited Multi-Trips Duration} (MTVRPTW-LMTD) restricts the multiple-trip (i.e., journey) duration from departure at the depot of the first trip to arrival at the depot of the last trip to be no larger than $D_{max}$.  This multiple-trip duration, sometimes referred to as "spread time" (e.g., Battarra et al., 2009 \cite{battarra2009adaptive}, Wang et al., 2014 \cite{wang2014metaheuristic}, Karoonsoontawong, 2015 \cite{karoonsoontawong2015efficient}, Cattaruzza et al., 2016b \cite{cattaruzza2016vehicle}) or "driver shift" (e.g., François et al., 2019 \cite{franccois2019adaptive}), represents the driver's working shift length, which is often limited by regulations.  We can capture the LMTD characteristic with the following additional constraints:
+
+The other type is the \textit{MTVRPTW with Limited Multi-Trip Duration} (MTVRPTW-LMTD) that restricts the multiple-trip (i.e., the whole journey) duration of each vehicle.  That is, the time that passes from the departure of the first trip from the depot until the arrival of the last trip at the depot cannot be larger than $D_{max}$.  This multiple-trip duration is also referred to as "spread time" \citep[e.g.,][]{battarra2009adaptive, wang2014metaheuristic, karoonsoontawong2015efficient, cattaruzza2016vehicle} or "driver shift" \citep[e.g.,][]{franccois2019adaptive} that represents a driver's working shift length, often limited by regulations.  Assuming that all used vehicles start their first trips from the depot at the same time, e.g., $a_0$, the mathematical formulation of the MTVRPTW-LMTD can be derived by introducing the following constraints into the program (\ref{eq1})-(\ref{eq15}).
+
+\begin{equation} \label{eq24}
+    t^p_{n+1} - a_0 \leq D_{max}, \quad \forall p \in P
+\end{equation}
+
+\subsection{MTVRPTW with release date}
+
+The \textit{MTVRPTW with Release date} (MTVRPTW-R) associates each customer with a release date, denoting when the goods allocated for the customer are ready for transport at the depot.  Let $r_i$ be the release date associated with the demand of customer $i$.  The release date constraints can be described as:
+
+\begin{equation} \label{eq25}
+    r_i \leq t^p_0 + M(1 - y^p_i), \quad \forall p \in P
+\end{equation}
+
+\cite{cattaruzza2016multi} model the last-mile delivery problem involving city distribution centers (CDC) as the MTVRPTW-R, in which packages are first transported to the CDC before delivering to customers.  \cite{zhen2020multi} consider not only the release date but also multi-depot for the practical operations of online shopping package delivery.  They assume that each depot is associated with its own vehicle fleet, and each trip must begin and end at the same depot.
+
+\subsection{MTVRPTW with heterogeneous fleet}
+
+The \textit{MTVRPTW with Heterogeneous Fleet} (MTVRPTW-HF) considers a mixed fleet of vehicles, each having distinct capacities and travel costs.  \cite{despaux2016multi} addresses a MTVRPTW-HF version that associates a distinct fixed cost to each vehicle, together with the fleet size constraints, which differs their problem from the M-MTVRPTW.  To mathematically model the MTVRPTW-HF, standard parameters such as vehicle capacity, travel times, and travel costs must be replaced by individual parameters.  Variables must be adjusted accordingly.
+
+\subsection{Time-dependent MTVRPTW}
+
+The \textit{Time-Dependent MTVRPTW} (TD-MTVRPTW) relaxes the conventional assumption that travel time between two nodes is constant.  \cite{pan2021multi} investigate an urban routing problem, in which the speed of vehicles varies based on the time of departure.  The authors capture the time-dependent aspect by dividing the workday into time slots and then modeling the speed profile as a stepwise function.
+
+\subsection{MTVRPTW with specific application considerations}
+
+The \textit{MTVRPTW with Specific Application Considerations} (MTVRPTW-SAC) incorporates various specific considerations into the MTVRPTW.  \cite{anaya2016biomedical} research the biomedical sample transportation problem, in which they remove vehicle number and capacity constraints while introducing multiple pick-ups at the same node, maximal transportation time after a sample is collected, and exceptions for emergency requests.  \addb{\cite{christiansen2017operational} study a maritime transportation planning problem with stowage constraints and dynamic sailing times, in which a heterogeneous fleet of supply vessels makes multiple trips to service different fuel types to time-window constrained customer ships that are anchored outside a major port.}  \cite{benkebir2019multi} consider the MTVRPTW with multiple driver regulations, including compulsory breaks and rest periods, daily and weekly working time limitation, and exceptions for extension of longer working time or shorter rest periods.

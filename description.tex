@@ -1,0 +1,144 @@
+
+\section{Problem description, formulation, and test instances}
+\label{sec:formulation}
+
+To address the MTVRPTW, two objectives are commonly considered in the MTVRPTW literature: 1) minimizing total route cost; and 2) minimizing the number of vehicles used plus the route cost associated with these vehicles.  The former is commonly used in the setting where all the vehicles must be used to perform tasks to ensure, for example, even workload distribution among drivers.  The latter is popular in applications where it is possible to leave some vehicles unused, and thus the number of vehicles used must be determined, in which each used vehicle incurs a fixed cost.  It follows that the objective of the applications requires the minimization of the total fixed costs associated with the vehicles and the total route cost incurred by using the vehicles.  Most papers in the MTVRPTW literature focus on the minimization of total route cost.  This objective is also more suitable for describing the objectives of other MTVRPTW variants.  Thus, this research develops a mathematical programming model of the MTVRPTW with the minimization of total route cost as the objective.  Then, this model is treated as the basis for introducing MTVRPTW variants.
+\newline
+
+So far, different formulations of the MTVRPTW have been proposed. For example, \cite{hernandez2014new} introduce an arc-based formulation; \cite{paradiso2020exact} develop a formulation based on structure; and \cite{azi2010exact} and \cite{macedo2011solving} incorporate both path and arc elements in their formulations.  However, these proposed formulations are not suitable for introducing the MTVRPTW and its variants.  Therefore, we develop a path flow formulation to achieve the goal of the review article.
+
+
+\subsection{Problem description}
+\label{sec:math-formulation}
+
+The MTVRPTW is defined as follows:  Consider $G = (N, A)$ as a directed network comprising a node set $N = V \cup \{0, n + 1\}$ and an arc set $A$.  Here, $V = \{1, 2,..., n\}$ represents the customer nodes, while the depot is indicated by either $0$ or $n + 1$.  Each arc $(i, j) \in A$ has a cost $c_{ij}$ and travel time $t_{ij}$.  Each customer $i \in V$ is associated with a demand $q_i$, a service time $s_i$, and a service time window $[a_i, b_i]$.  The vehicle must reach $i$ before $b_i$, and if it arrives earlier than $a_i$, it must wait until the service begins (i.e., hard time window).  For the depot, $s_0$ models a constant loading time, and $[a_0, b_0] = [a_{n+1}, b_{n+1}] = [E, L]$, in which $E$ represents the earliest possible departure from the depot, and $L$ represents the latest possible arrival at the depot for all trips.  At the depot, there is a homogeneous fleet of $K$ vehicles with fixed capacity of $Q$.  A vehicle begins at the depot, serves some customers, and returns to the depot; these steps constitute a trip, and a vehicle may perform multiple trips.  Some authors use the terms “trip” and “route” interchangeably. Hence, to avoid confusion, we use only “trip” in this paper.  In addition, we adopt the definition from \cite{cattaruzza2016vehicle} and define the multiple trips allocated to a single vehicle as a "journey".  A trip $p$ is represented as an ordered list of nodes $(0, i_{p_1}, i_{p_2}, ..., n + 1)$, and is a feasible elementary path (i.e., satisfying vehicle capacity and time window constraints).  In addition, each trip $p$ is associated with travel cost $c_p = \sum_{(i, j) \in p} c_{ij}$.  The route cost in the MTVRPTW is calculated by adding up the costs associated with the chosen trips in a solution.
+
+
+%The Multi-Trip Vehicle Routing Problem with Time Windows (MTVRPTW) is defined as follows: we have a set of nodes $V^+ = V \cup \{0, n + 1\}$, where $V = \{1, 2,..., n\}$ is the set of customer nodes and the depot is denoted by $0$ or $n + 1$.  $A$ is the arc set, with each arc $(i, j) \in A$ is associated with a distance $d_{ij}$ and a travel time $t_{ij}$.  Each customer $i \in V$ is characterized by a demand $q_i$, a service time $s_i$, and a time window $[a_i, b_i]$.  The vehicle must arrive at $i$ before $b_i$, and if it arrives before $a_i$, it must wait until the time window begins (i.e., hard time window). For the depot, $s_0$ models a constant loading time, and $b_0 = T$ models a planning horizon for all trips.  A homogeneous fleet of $K$ vehicles with fixed capacity $Q$ is available at the depot.  A vehicle starts from the depot, visits some customers, then comes back to the depot; these steps constitute a trip, and a vehicle may perform multiple trips.  Some authors use the terms "trip" and "route" interchangeably, so to avoid confusion, we will avoid using "route" in this paper to avoid confusion.  We will also refer to the multiple trips assigned to the same vehicle as a "journey" (Cattaruzza et al., 2016b \cite{cattaruzza2016vehicle}).
+%\newline
+
+%The Multi-Trip Vehicle Routing Problem with Time Windows (MTVRPTW) is defined as follows: let $G = (V^+, D)$ be a weighted complete graph.  $V^+ = V \cup \{0, n + 1\}$, with $V = \{1, ..., n\}$ represents the set of customer nodes, and $\{0, n + 1\}$ denotes the depot.  $D$ represents the set of arcs, where each arc $(i, j)$ is associated with the routing cost $d_{ij}$ from customer $i$ to customer $j$.  Each customer $i \in V$ is characterized by a demand $q_i$, a service time $s_i$, and a time window $[a_i, b_i]$.  The vehicle must arrive at $i$ before $b_i$, and if the vehicle arrives before $a_i$, it must wait until the time window begins (i.e., hard time window). For the depot, $s_0$ models a constant loading time, and $b_0 = T$ models a planning horizon for all trips.
+%\newline
+
+%A trip $p$ can be represented as an ordered list of nodes $(0, i_{p_1}, i_{p_2}, ..., i_{p_{\mu_p}}, n + 1)$, where $\mu_p$ is the number of visited customers.  For any trip $p$, coefficients $t^p_0$, $t^p_{n+1}$ and $t^p_i$ represent the trip starting time (i.e., when the vehicle leaves the depot), the trip ending time (i.e., when the vehicle comes back to the depot), and the service starting time at customer $i$, respectively.  Note that $t^p_i = 0$ if customer $i$ is not served by the trip $p$ and trip duration excludes vehicle loading time.  For each customer $i \in V$, a coefficient $\tau^p_i$ describes the number of times the customer is visited in trip $p$.  For any two customers $i, j \in V$, a binary coefficient $w^p_{ij}$ denotes whether if $i$ and $j$ are visited consecutively by trip $p$ in that order.  $P$ is the set of all feasible trips, where a trip is feasible if and only if it satisfies vehicle load constraints and time window constraints for all customers.  In addition, each trip $p$ is associated with a travel cost $c_p$, which can be the total traveled distance or time of the trip.
+%\newline
+
+%A fixed fleet of $K$ identical vehicles with vehicle capacity $Q$ is available at the depot.  A vehicle starts from the depot, visits some customers, then comes back to the depot, these steps constitute a trip.  Each vehicle is allowed to perform multiple trips because, in practice, it is often more cost-effective to reuse an existing vehicle rather than introduce a new one.  Some authors use the terms "trip" and "route" interchangeably, however, to avoid confusion, we will no longer use "route" in this paper.  We shall follow the convention suggested by Cattaruzza et al. (2016b) \cite{cattaruzza2016vehicle}, which refers to a sequence of customer services starting and ending at the depot without an intermediate stop at the depot as a "trip", and refers to the multiple trips assigned to the same vehicle as a "journey".  Additionally, as we model a homogeneous fleet of $K$ vehicles with constant speed, we can conveniently convert between the travel time and distance, thus, using the same unit of measurement (see Azi et al., 2014 \cite{azi2014adaptive}).  Similar to the VRPTW, the routing cost (i.e., routing cost) is defined as the total travel distance, which excludes the waiting time.
+%\newline
+
+% The objective of the MTVRPTW is to determine an assignment of vehicle trips to customers that minimizes the number of used vehicles (i.e., fleet size), breaking ties in favor of the minimum routing cost, while satisfying the following conditions:
+
+% The objective of the MTVRPTW is to determine an assignment of vehicle trips to customers that minimizes the total travel cost while satisfying the following conditions:
+% \begin{enumerate}
+% \item Each customer is visited exactly once within its service time window;
+% \item The sum of customers' demands in any trip does not exceed vehicle capacity.
+% \end{enumerate}
+
+\subsection{Model formulation}
+\label{sec:model}
+This research formulates the MTVRPTW as a \textit{mixed integer linear program} (MILP) that is a path flow formulation.  Below, we show the notation used to construct the mathematical model, and then the program itself.
+
+\subsubsection{Notations}
+\textbf{Set:}
+\newline
+$P$: set of all feasible elementary trips from depot $0$ (source) to depot $n + 1$ (sink)
+\newline
+$V$: set of customers
+\newline
+% $p_1 < p_2$: trip $p_1 \in P$ and trip $p_2 \in P$ are performed by the same vehicle, and $p_1$ is performed before $p_2$
+% \newline
+
+\noindent
+\textbf{Parameter:}
+\newline
+$K$: maximum number of vehicles available
+\newline
+$Q$: vehicle capacity
+\newline
+$t_{ij}$: travel time associated with arc $(i, j) \in A$
+\newline
+$c_p$: travel cost associated with path $p \in P$
+\newline
+$q_i$: demand associated with customer $i \in V$
+\newline
+$s_i$: service time associated with customer $i \in V$
+\newline
+$s_0$: loading time at depot $0$
+\newline
+$[a_i, b_i]$: time window associated with customer $i \in V$
+\newline
+$[a_0, b_0] = [a_{n + 1}, b_{n + 1}]$: depot operation time
+\newline
+$\vartheta^p_i$: customer-trip indicator coefficient such that $\vartheta^p_i = 1$ if trip $p$ passes customer $i$, and $\vartheta^p_i = 0$ otherwise
+\newline
+$\delta^p_{ij}$: arc-trip indicator coefficient such that $\delta^p_{ij} = 1$ if arc $(i, j) \in A$ appears in trip $p \in P$, and $\delta^p_{ij} = 0$ otherwise
+\newline
+$M$: a sufficiently large number
+\newline
+
+\noindent
+\textbf{Variable:}
+\newline
+$x_p$: $x_p = 1$ if $p \in P$ is a part of the optimal solution, and $x_p = 0$ otherwise
+\newline
+$y^p_i$: $y^p_i = 1$ if customer $i \in V$ is served in trip $p \in P$, and $y^p_i = 0$ otherwise
+\newline
+$t^p_i$: service start time at node $i \in N$ of trip $p \in P$
+\newline
+$z_{{p_1}{p_2}}$: $z_{{p_1}{p_2}} = 1$ if trip $p_1 \in P$ is immediately followed by trip $p_2 (> p_1) \in P$ of the same vehicle, and $z_{{p_1}{p_2}} = 0$ otherwise
+
+\subsubsection{Mathematical model}
+
+\begin{spreadlines}{14pt} % ooiwt - from mathtools
+    \allowdisplaybreaks
+    \begin{align}
+        Min                                                                               & \quad \sum_{p \in P} c_p x_p            & \quad
+        \label{eq1}                                                                                                                                                                    \\
+        s.t. \quad y^p_i                                                                  & = x_p \vartheta^p_i,                    & \quad \forall i \in V, \quad \forall p \in P,
+        \label{eq2}                                                                                                                                                                    \\
+        \sum_{p \in P} y^p_i                                                              & = 1,                                    & \quad \forall i \in V,
+        \label{eq3}                                                                                                                                                                    \\
+        \sum_{i \in V} q_i y^p_i                                                          & \leq Q,                                 & \quad \forall p \in P,
+        \label{eq4}                                                                                                                                                                    \\
+        a_i y^p_i \leq t^p_i                                                              & \leq b_i y^p_i,                         & \quad \forall i \in N, \quad \forall p \in P,
+        \label{eq5}                                                                                                                                                                    \\
+        t^p_i + s_i + t_{ij}                                                              & \leq t^p_j + M(1 - \delta^p_{ij} x_p),  & \quad \forall i, j \in V, \quad \forall p \in P,
+        \label{eq6}                                                                                                                                                                    \\
+        t^{p_1}_{n + 1} + s_0                                                             & \leq t^{p_2}_0 + M(1 - z_{{p_1}{p_2}}), & \quad \forall p_1, p_2 \in P, \quad p_1 < p_2,
+        \label{eq7}                                                                                                                                                                    \\
+        \sum_{p \in P} x_p - \sum_{p_1 \in P} \sum_{p_2 \in P : p_1 < p_2} z_{{p_1}{p_2}} & \leq K,
+        \label{eq8}                                                                                                                                                                    \\
+        \sum_{p_2 : p_1 < p_2} z_{{p_1}{p_2}}                                             & \leq 1,                                 & \quad \forall p_1 \in P,
+        \label{eq9}                                                                                                                                                                    \\
+        \sum_{p_1 : p_1 < p_2} z_{{p_1}{p_2}}                                             & \leq 1,                                 & \quad \forall p_2 \in P,
+        \label{eq10}                                                                                                                                                                   \\
+        z_{{p_1}{p_2}}                                                                    & \leq x_{p_1},                           & \quad \forall p_1, p_2 \in P, \quad p_1 < p_2,
+        \label{eq11}                                                                                                                                                                   \\
+        z_{{p_1}{p_2}}                                                                    & \leq x_{p_2},                           & \quad \forall p_1, p_2 \in P, \quad p_1 < p_2,
+        \label{eq12}                                                                                                                                                                   \\
+        x_p                                                                               & \in \{0,1\},                            & \quad \forall p \in P,
+        \label{eq13}                                                                                                                                                                   \\
+        y^p_i                                                                             & \in \{0,1\},                            & \quad \forall i \in V, \quad \forall p \in P,
+        \label{eq14}                                                                                                                                                                   \\
+        z_{{p_1}{p_2}}                                                                    & \in \{0,1\},                            & \quad \forall p_1, p_2 \in P,  \quad p_1 < p_2
+        \label{eq15}
+    \end{align}
+\end{spreadlines}
+
+%Objective function (\ref{eq1}) is to minimize the size of the required fleet, while also minimizing the routing cost.  We prioritize optimizing the fleet size by assigning a weight $\theta$. Another approach for such multi-objective problems is a lexicographic, or hierarchical method (see Arora, 2012 \cite{arora2017multi}), in which preferences are imposed by ordering the objective functions.
+
+Objective function (\ref{eq1}) minimizes the overall route cost.  It is worth noting that \cite{franccois2019adaptive} argues that the objective function of optimizing the travel time causes an unrealistic increase in waiting time.  Therefore, they discuss a different objective function of minimizing total driver working duration that includes not only vehicle travel time but also vehicle waiting time, loading time at the depot, and service times of customers.  Constraints (\ref{eq2}) make sure that if a customer $i \in V$ is served in trip $p \in P$, then trip $p$ must pass customer $i$ and belong to the optimal solution. Constraints (\ref{eq3}) guarantee exactly-once service at each customer.  Constraints (\ref{eq4}) are the capacity restrictions for each $p \in P$.  Constraints (\ref{eq5}) and (\ref{eq6}) guarantee schedule feasibility.  Constraints (\ref{eq7}) ensure no overlapping time between two successive trips of the same vehicle.  Constraint (\ref{eq8}) sets a limit on the maximum number of available vehicles.  Constraints (\ref{eq9}) and (\ref{eq10}) make sure that a trip can be immediately followed by at most one trip, and can immediately follow at most one trip, respectively.  Constraints (\ref{eq11}) and (\ref{eq12}) ensure that $z_{{p_1}{p_2}}$ can take the value of one only if both trips $p_1$ and $p_2$ are selected in the optimal solution.  Constraints (\ref{eq13})-(\ref{eq15}) restrict variable domains.
+\newline
+
+% In Constraints (\ref{eq8}), the number of vehicles used in a solution (i.e., the left side of the inequalities) is calculated as the difference between the number of trips and the number of $z_{{p_1}{p_2}}$ decision variables set to one (note that for each vehicle, the number of pairs of consecutive trips is always equal to the number of trips performed by that vehicle minus one).
+
+%Note that the above model is a path-based formulation.  Researchers have also proposed arc-based formulation (e.g., Hernandez et al., 2014 \cite{hernandez2014new}), structure-based formulation (e.g., Paradiso et al., 2020 \cite{paradiso2020exact}), and formulations that incorporate both path and arc elements (e.g., Azi et al., 2010 \cite{azi2010exact}, Macedo et al., 2011 \cite{macedo2011solving}) to model MTVRPTWs.
+% \newline
+
+%The above formulation is an extension to Azi et al., 2010 \cite{azi2010exact}.  Azi et al., 2010 \cite{azi2010exact} denoted the set of trips used in a solution as $R$; however, it is unclear whether this set is given or how to obtain it.  In our formulation, we use $P$ and $x_p$ to denote the set of all feasible elementary trips and whether a trip is selected in the optimal solution, respectively.
+%\newline
+
+
+\subsection{Instances for the MTVRPTW}
+
+To analyze the performance of the MTVRPTW algorithms, a popular choice is to adopt the widely recognized Solomon instances designed for the VRPTW \citep{solomon1987algorithms}.  The instances are \add{grouped based on the distribution of the customer locations: uniformly random (R), clustered (C), or mixed (RC)}.  Each group is additionally split into two sub-groups (1: the short horizon and short time windows; 2: the long horizon and long time windows).  Articles in the MTVRPTW literature generally exclude the first group of instances because the short scheduling horizon significantly limits the creation of journeys with multiple trips.  While each Solomon instance contains 100 customers, the studies with exact algorithms normally use only the first 25, 40, or 50 customers due to the limitation of the exact approaches.  However, studies with heuristic algorithms usually evaluate full-size instances.  \cite{gehring1999parallel} propose extensive sets of instances with up to 1000 customers that have also been used to benchmark heuristic algorithms for the MTVRPTW \citep[see][]{cattaruzza2014iterated}.  An exhaustive list of the above instances can be found online at \cite{sintef}.  Note that previous studies typically extend the above instances with problem-specific constraints and parameters to benchmark different MTVRPTW variants.
