@@ -1,19 +1,17 @@
-%\documentclass{cas-sc}
-\documentclass[11pt]{article}
+\documentclass[lettersize,journal]{IEEEtran}
 \usepackage{times}
 \usepackage{natbib}
 \usepackage{fullpage}
 \let\printorcid\relax % Remove ORCID footnote
 
-\usepackage [english]{babel}
-\usepackage [autostyle, english = american]{csquotes}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[autostyle, english = american]{csquotes}
 \MakeOuterQuote{"}
 
 \bibliographystyle{apa}
 \AtBeginDocument{\renewcommand{\harvardand}{and}}
 \setcitestyle{authoryear,open={(},close={)}} %Citation-related commands
-
-\usepackage[utf8]{inputenc}
 \usepackage{mathtools}
 \usepackage{multirow}
 \usepackage{longtable}
@@ -30,26 +28,14 @@
 \floatstyle{plaintop}
 \restylefloat{table}
 
-\linespread{1.5}
-
 \newcommand\thefontsize{\expandafter\string\the\font}
-%\newcommand\add[1]{\textcolor{blue}{#1}}
 \newcommand\add[1]{\textcolor{black}{#1}}
 \newcommand\addb[1]{\textcolor{black}{#1}}
 
-
-% \usepackage[onehalfspacing]{setspace}
-
-%\newcommand{\onehalfspacing}{%
-%  \setstretch {1.2135}
-%}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Multi-Trip Vehicle Routing Problem with Time Windows: A Classification and Review}
 \begin{document}
 
-%\title[mode=title]{Multi-Trip Vehicle Routing Problem with Time Windows: A Classification and Review}
-%\shorttitle{}
+\title{Multi-Trip Vehicle Routing Problem with Time Windows: A Classification and Review}
+
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -58,13 +44,9 @@
     The Vehicle Routing Problem (VRP) is extensively studied in combinatorial optimization and has diverse practical applications. The recent trend extends the VRP with real-life constraints.  Among them, two popular constraints are (i) time window: the service of each customer must be performed within a given time interval; and (ii) multiple trips: a vehicle may perform more than one trip.  A combination of the two features leads to the Multi-Trip Vehicle Routing Problem with Time Windows (MTVRPTW). The MTVRPTW and its extensions have been studied actively in the past few years.  While the problem constraints and objectives vary greatly among different articles, a comprehensive review of MTVRPTW literature is missing.  Therefore, this research aims to conduct such a review of previous studies published between 2009 and 2023.  In this review, we define the MTVRPTW by giving a mathematical formulation; survey the variants of the MTVRPTW; review the exact and heuristic solution algorithms; and suggest possible future research directions.
 \end{abstract}
 
-%\begin{keywords}
-\textbf{Keywords:} Vehicle routing problem;
-Time window;
-Multiple trips;
-City logistics;
-Review
-\maketitle
+\begin{IEEEkeywords}
+    Vehicle routing problem, Time window, Multiple trips, City logistics, Review.
+\end{IEEEkeywords}
 
 \input{introduction.tex}
 
